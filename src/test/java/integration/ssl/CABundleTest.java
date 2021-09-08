@@ -1,6 +1,5 @@
 package integration.ssl;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,7 +32,7 @@ public class CABundleTest {
 
     private static Stream<Arguments> testCases() {
         return Stream.of(
-                //arguments(false, "integration/ssl/with/bundle")
+                arguments(false, "integration/ssl/with/bundle"),
                 arguments(true, "integration/ssl/without/bundle")
         );
     };
@@ -94,14 +93,15 @@ public class CABundleTest {
         Thread.sleep(5000);
         File logFile = new File(outputLog);
         Scanner scanner = new Scanner(logFile);
+        boolean containsTarget = false;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             logger.info("Line read from agent log file : {}", line);
-            boolean containsTarget = line.contains(targetString);
-            if ((findTarget && !containsTarget) || (!findTarget && containsTarget)) {
-                logger.error("Contains target : {} and find target : {} do not match", containsTarget, findTarget);
-                fail();
-            }
+            containsTarget = containsTarget || line.contains(targetString);
+        }
+        if ((findTarget && !containsTarget) || (!findTarget && containsTarget)) {
+            logger.error("Contains target : {} and find target : {} do not match", containsTarget, findTarget);
+            fail();
         }
         scanner.close();
         logger.info("Finished reading log file");
