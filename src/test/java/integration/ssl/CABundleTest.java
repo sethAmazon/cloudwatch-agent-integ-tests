@@ -1,5 +1,7 @@
 package integration.ssl;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,6 +38,11 @@ public class CABundleTest {
         );
     };
 
+    @BeforeEach
+    public void before() {
+        clearLogFile();
+    }
+
     @ParameterizedTest
     @MethodSource("testCases")
     public void bundleTest(boolean findTarget, String dataInput) throws IOException, InterruptedException {
@@ -50,6 +57,12 @@ public class CABundleTest {
         logger.info("Agent has been running for : {}", agentRuntime);
         stopTheAgent();
         readTheOutputLog(findTarget);
+    }
+
+    private void clearLogFile() throws IOException {
+        File logFile = new File(outputLog);
+        logFile.delete();
+        logFile.createNewFile();
     }
 
     private void copyFile(String pathIn, String pathOut) throws IOException {
