@@ -77,7 +77,8 @@ public class CABundleTest {
         logger.info("Agent is stopped");
     }
 
-    private void readTheOutputLog(boolean findTarget) throws FileNotFoundException {
+    private void readTheOutputLog(boolean findTarget) throws FileNotFoundException, InterruptedException {
+        Thread.sleep(5000);
         File logFile = new File(outputLog);
         Scanner scanner = new Scanner(logFile);
         while (scanner.hasNextLine()) {
