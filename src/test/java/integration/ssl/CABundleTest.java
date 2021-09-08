@@ -1,26 +1,24 @@
 package integration.ssl;
 
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @SpringBootTest(classes={com.cloud.watch.agent.opensource.test.OpensourceIntegTestApplication.class})
-@RunWith(Parameterized.class)
 public class CABundleTest {
     private static final Logger logger = LoggerFactory.getLogger(CABundleTest.class);
     private static final String configOutputPath = "/opt/aws/amazon-cloudwatch-agent/bin/config.json";
@@ -31,24 +29,17 @@ public class CABundleTest {
     private static final String targetString = "x509";
     //Let the agent run for 5 minutes. This will give us at least 4 cycles of data
     private static final int agentRuntime = 300000;
-    private final boolean findTarget;
-    private String dataInput = "integration/ssl";
 
-    public CABundleTest(boolean findTarget, String dataInput) {
-        this.findTarget = findTarget;
-        this.dataInput = this.dataInput + dataInput;
-    }
+    private static Stream<Arguments> testCases() {
+        return Stream.of(
+                arguments(false, "integration/ssl/with/bundle"),
+                arguments(true, "integration/ssl/without/bundle")
+        );
+    };
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> bundle() {
-        return Arrays.asList(new Object[][] {
-                { false, "/with/bundle" },
-                { true, "without/bundle"}
-        });
-    }
-
-    @Test
-    public void withBundleTest() throws IOException, InterruptedException {
+    @ParameterizedTest
+    @MethodSource("testCases")
+    public void bundleTest(boolean findTarget, String dataInput) throws IOException, InterruptedException {
         String configInputPath = new ClassPathResource(dataInput + configJSON).getFile().getPath();
         String commonConfigInputPath = new ClassPathResource(dataInput + commonConfigTOML).getFile().getPath();
         logger.info("Config file path : {} common config file path : {}", configInputPath, commonConfigInputPath);
@@ -57,7 +48,7 @@ public class CABundleTest {
         startTheAgent();
         Thread.sleep(agentRuntime);
         stopTheAgent();
-        readTheOutputLog();
+        readTheOutputLog(findTarget);
     }
 
     private void copyFile(String pathIn, String pathOut) throws IOException {
@@ -82,7 +73,7 @@ public class CABundleTest {
         process.waitFor();
     }
 
-    private void readTheOutputLog() throws FileNotFoundException {
+    private void readTheOutputLog(boolean findTarget) throws FileNotFoundException {
         File logFile = new File(outputLog);
         Scanner scanner = new Scanner(logFile);
         while (scanner.hasNextLine()) {
