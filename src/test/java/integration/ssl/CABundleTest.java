@@ -32,13 +32,14 @@ public class CABundleTest {
     private static Stream<Arguments> testCases() {
         return Stream.of(
                 arguments(false, "integration/ssl/with/bundle"),
-                arguments(true, "integration/ssl/without/bundle")
+                //arguments(true, "integration/ssl/without/bundle")
         );
     };
 
     @ParameterizedTest
     @MethodSource("testCases")
     public void bundleTest(boolean findTarget, String dataInput) throws IOException, InterruptedException {
+        logger.info("Find target : {} data input : {}", findTarget, dataInput);
         String configInputPath = new ClassPathResource(dataInput + configJSON).getFile().getPath();
         String commonConfigInputPath = new ClassPathResource(dataInput + commonConfigTOML).getFile().getPath();
         logger.info("Config file path : {} common config file path : {}", configInputPath, commonConfigInputPath);
@@ -46,6 +47,7 @@ public class CABundleTest {
         copyFile(commonConfigInputPath, commonConfigOutputPath);
         startTheAgent();
         Thread.sleep(agentRuntime);
+        logger.info("Agent has been running for : {}", agentRuntime);
         stopTheAgent();
         readTheOutputLog(findTarget);
     }
@@ -54,6 +56,7 @@ public class CABundleTest {
         String cmd = "sudo cp " + pathIn + " " + pathOut;
         Runtime run = Runtime.getRuntime();
         run.exec(cmd);
+        logger.info("File : {} copied to : {}", pathIn, pathOut);
     }
 
     private void startTheAgent() throws IOException, InterruptedException {
@@ -63,6 +66,7 @@ public class CABundleTest {
         Runtime run = Runtime.getRuntime();
         Process process = run.exec(cmd);
         process.waitFor();
+        logger.info("Agent has started");
     }
 
     private void stopTheAgent() throws IOException, InterruptedException {
@@ -70,6 +74,7 @@ public class CABundleTest {
         Runtime run = Runtime.getRuntime();
         Process process = run.exec(cmd);
         process.waitFor();
+        logger.info("Agent is stopped");
     }
 
     private void readTheOutputLog(boolean findTarget) throws FileNotFoundException {
@@ -85,6 +90,7 @@ public class CABundleTest {
             }
         }
         scanner.close();
+        logger.info("Finished reading log file");
     }
 
 }
