@@ -39,7 +39,7 @@ public class CABundleTest {
     };
 
     @BeforeEach
-    public void before() {
+    public void before() throws IOException {
         clearLogFile();
     }
 
