@@ -3,7 +3,6 @@ package integration.ssl;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +26,8 @@ public class CABundleTest {
     private static final String commonConfigTOML = "/common-config.toml";
     private static final String outputLog = "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log";
     private static final String targetString = "x509";
-    //Let the agent run for 5 minutes. This will give us at least 4 cycles of data
-    private static final int agentRuntime = 300000;
+    //Let the agent run for 2 minutes. This will give agent enough time to call server
+    private static final int agentRuntime = 120000;
 
     private static Stream<Arguments> testCases() {
         return Stream.of(
