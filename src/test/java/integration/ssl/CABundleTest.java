@@ -60,9 +60,9 @@ public class CABundleTest {
     }
 
     private void clearLogFile() throws IOException {
-        File logFile = new File(outputLog);
-        logFile.delete();
-        logFile.createNewFile();
+        String cmd = "sudo rm " + outputLog + " && sudo cat > " + outputLog;
+        Runtime run = Runtime.getRuntime();
+        run.exec(cmd);
     }
 
     private void copyFile(String pathIn, String pathOut) throws IOException {
