@@ -26,14 +26,14 @@ public class CABundleTest {
     private static final String configJSON = "/config.json";
     private static final String commonConfigTOML = "/common-config.toml";
     private static final String outputLog = "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log";
-    private static final String targetString = "x509";
+    private static final String targetString = "x509: certificate signed by unknown authority";
     //Let the agent run for 2 minutes. This will give agent enough time to call server
     private static final int agentRuntime = 120000;
 
     private static Stream<Arguments> testCases() {
         return Stream.of(
                 arguments(false, "integration/ssl/with/bundle"),
-                arguments(false, "integration/ssl/without/bundle")
+                arguments(true, "integration/ssl/without/bundle")
         );
     };
 
@@ -99,8 +99,9 @@ public class CABundleTest {
             logger.info("Line read from agent log file : {}", line);
             containsTarget = containsTarget || line.contains(targetString);
         }
+        logger.info("Find target : {} target found : {}", findTarget, containsTarget);
         if ((findTarget && !containsTarget) || (!findTarget && containsTarget)) {
-            logger.error("Contains target : {} and find target : {} do not match", containsTarget, findTarget);
+            logger.error("Find target : {} target found : {} do not match", findTarget, containsTarget);
             fail();
         }
         scanner.close();
