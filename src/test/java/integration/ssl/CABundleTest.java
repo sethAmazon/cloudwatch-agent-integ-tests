@@ -91,7 +91,6 @@ public class CABundleTest {
     }
 
     private void readTheOutputLog(boolean findTarget) throws FileNotFoundException, InterruptedException {
-        Thread.sleep(5000);
         File logFile = new File(outputLog);
         Scanner scanner = new Scanner(logFile);
         boolean containsTarget = false;
