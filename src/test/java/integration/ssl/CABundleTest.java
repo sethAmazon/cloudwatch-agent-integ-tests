@@ -27,8 +27,8 @@ public class CABundleTest {
     private static final String commonConfigTOML = "/common-config.toml";
     private static final String outputLog = "/opt/aws/amazon-cloudwatch-agent/logs/amazon-cloudwatch-agent.log";
     private static final String targetString = "x509";
-    //Let the agent run for 2 minutes. This will give agent enough time to call server
-    private static final int agentRuntime = 120000;
+    //Let the agent run for 1 minutes. This will give agent enough time to call server
+    private static final int agentRuntime = 60000;
 
     private static Stream<Arguments> testCases() {
         return Stream.of(
