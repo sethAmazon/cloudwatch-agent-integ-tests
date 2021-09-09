@@ -62,6 +62,7 @@ public class CABundleTest {
         String cmd = "sudo rm " + outputLog + " && sudo cat > " + outputLog;
         Runtime run = Runtime.getRuntime();
         run.exec(cmd);
+        logger.info("Cleared log file : {}", outputLog);
     }
 
     private void copyFile(String pathIn, String pathOut) throws IOException {
