@@ -32,7 +32,8 @@ public class CABundleTest {
 
     private static Stream<Arguments> testCases() {
         return Stream.of(
-                arguments(false, "integration/ssl/with/bundle"),
+                arguments(false, "integration/ssl/with/combine/bundle"),
+                arguments(true, "integration/ssl/with/original/bundle"),
                 arguments(true, "integration/ssl/without/bundle")
         );
     };
