@@ -40,7 +40,7 @@ What is required to run
         CloudWatchAgentServerRole attached to ec2
     </li>
     <li>
-        If you do not want to set up ec2 instance use ami ami-0729d55b0fd1376e3
+        If you do not want to set up ec2 instance use ami ami-0e76c450140211023
     </li>
     <li>
         Github secrets (Add you host name HOSTNAME, ssh key AWS_PRIVATE_KEY, and user login USER_NAME)
