@@ -39,4 +39,7 @@ What is required to run
     <li>
         CloudWatchAgentServerRole attached to ec2
     </li>
+    <li>
+        Github secrets (Add you host name HOSTNAME, ssh key AWS_PRIVATE_KEY, and user login USER_NAME)
+    </li>
 </ul>
