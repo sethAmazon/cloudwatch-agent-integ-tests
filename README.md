@@ -43,6 +43,6 @@ What is required to run
         If you do not want to set up ec2 instance use ami ami-0e76c450140211023
     </li>
     <li>
-        Github secrets (Add you host name HOSTNAME, ssh key AWS_PRIVATE_KEY, and user login USER_NAME)
+        Github secrets (AWS access key and password TERRAFORM_AWS_ACCESS_KEY_ID secrets.TERRAFORM_AWS_SECRET_ACCESS_KEY, ssh key AWS_PRIVATE_KEY, and user login USER_NAME)
     </li>
 </ul>
